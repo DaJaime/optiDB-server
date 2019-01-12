@@ -12,8 +12,8 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "optiDB"
-  config.vm.hostname = "projetMaster"
+  config.vm.box = "optiDB-server"
+  config.vm.hostname = "projetMaster-server"
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -51,7 +51,7 @@ Vagrant.configure("2") do |config|
   # Example for VirtualBox:
   #
   config.vm.provider "virtualbox" do |vb|
-      vb.name = "projetMaster"
+      vb.name = "projetMaster-server"
   #   # Display the VirtualBox GUI when booting the machine
   #   vb.gui = true
   #

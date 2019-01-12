@@ -1,5 +1,5 @@
-[![Build Status](https://img.shields.io/travis/ChaudhryHaseeb/optiDB/master.svg?style=flat-square)](https://travis-ci.org/chaudhryHaseeb/optiDB)
-[![Waffle.io - Columns and their card count](https://badge.waffle.io/ChaudhryHaseeb/optiDB.svg?columns=all)](https://waffle.io/ChaudhryHaseeb/optiDB)
+[![Build Status](https://img.shields.io/travis/DaJaime/optiDB-server/master.svg?style=flat-square)](https://travis-ci.org/DaJaime/optiDB-server)
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/DaJaime/optiDB-server.svg?columns=all)](https://waffle.io/DaJaime/optiDB-server)
 
 
 # OptiDB côté serveur - Projet Master
