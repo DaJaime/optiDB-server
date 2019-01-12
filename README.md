@@ -2,7 +2,7 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/ChaudhryHaseeb/optiDB.svg?columns=all)](https://waffle.io/ChaudhryHaseeb/optiDB)
 
 
-# OptiDB - Projet Master
+# OptiDB côté serveur - Projet Master
 
 ## Prérequis
 * Git, gestionnaire de version - [Télécharger git](https://git-scm.com/downloads)
@@ -21,7 +21,7 @@ cd $chemin_vers_la_box
 
 vagrant box add --name nomDeLaBox cheminDeLaBox
 
-git clone https://github.com/ChaudhryHaseeb/optiDB.git
+git clone https://github.com/DaJaime/optiDB-server.git
 
 vagrant up
 ```
