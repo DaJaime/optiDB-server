@@ -9,8 +9,8 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>optidb.server</groupId>
-	<artifactId>demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>optidb-server</artifactId>
+	<version>0.0.1</version>
 	<name>optiDB-server</name>
 	<description>optiDB-server in Spring</description>
 
