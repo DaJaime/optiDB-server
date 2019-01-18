@@ -6,6 +6,7 @@ __pycache__/
 # IDE
 .idea
 .vscode
+.iml
 
 #Vagrant
 .vagrant
@@ -43,14 +44,8 @@ instance/
 # Sphinx documentation
 docs/_build/
 
-# PyBuilder
+# MvnBuilder
 target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
 
 # celery beat schedule file
 celerybeat-schedule
