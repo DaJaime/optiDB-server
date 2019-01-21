@@ -1,6 +1,10 @@
 [![Build Status](https://img.shields.io/travis/DaJaime/optiDB-server/master.svg?style=flat-square)](https://travis-ci.com/DaJaime/optiDB-server)
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/DaJaime/optiDB-server.svg?columns=all)](https://waffle.io/DaJaime/optiDB-server)
 
+[![SonarCloud Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=optidb.server%3Aoptidb-server&metric=alert_status)](https://sonarcloud.io/dashboard?id=optidb.server%3Aoptidb-server)
+[![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=optidb.server%3Aoptidb-server&metric=coverage)](https://sonarcloud.io/dashboard?id=optidb.server%3Aoptidb-server)
+[![SonarCloud Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=optidb.server%3Aoptidb-server&metric=sqale_index)](https://sonarcloud.io/dashboard?id=optidb.server%3Aoptidb-server)
+
 
 # OptiDB côté serveur - Projet Master
 
