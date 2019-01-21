@@ -6,7 +6,7 @@ script: mvn clean verify
 dist: trusty
 addons:
   sonarcloud:
-    organization: "Analyze optiDB-server" # the key of the org you chose at step #3
+    organization: "dajaime-github" # the key of the org you chose at step #3
     token:
       secure: d5ee16c827da23c39a27410e3afe15574574edd1 # encrypted value of your token
 script:
