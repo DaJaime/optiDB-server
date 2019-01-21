@@ -17,7 +17,7 @@ public class OptiDbServerApplication
 		SpringApplication.run(OptiDbServerApplication.class, args);
 	}
 
-	@RequestMapping(value="/test")
+	@RequestMapping(value = "/")
 	public String home()
 	{
 		System.out.println("La version est : " + SpringVersion.getVersion());
