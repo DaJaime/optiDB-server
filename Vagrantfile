@@ -2,7 +2,7 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "optiDB-server"
   config.vm.hostname = "projetMaster-server"
-  config.vm.network "public_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.33.10"
   config.vm.network "forwarded_port", guest: 8000, host: 8000, host_ip: "127.0.0.1"
   config.vm.provider "virtualbox" do |vb|
       vb.name = "projetMaster-server"
