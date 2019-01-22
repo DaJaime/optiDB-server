@@ -47,8 +47,10 @@ public class Platform {
             return null;
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
             return null;
         }
     }
+
 
 }
