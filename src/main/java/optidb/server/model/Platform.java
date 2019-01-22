@@ -39,8 +39,8 @@ public class Platform {
             return line;
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
 }

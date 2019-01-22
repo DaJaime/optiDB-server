@@ -14,6 +14,7 @@ public class PlatformRestController {
 
         switch (name) {
             case "hadoop":
+                System.out.println("Hadoop");
                 return new Platform(name);
 
             default:
