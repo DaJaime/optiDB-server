@@ -11,14 +11,7 @@ public class PlatformRestController {
     @RequestMapping("/platform")
     public Platform platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name) {
         name = name.toLowerCase();
+        return new Platform(name);
 
-        switch (name) {
-            case "hadoop":
-                System.out.println("Hadoop");
-                return new Platform(name);
-
-            default:
-                return new Platform(name);
-        }
     }
 }
