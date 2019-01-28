@@ -1,6 +1,7 @@
 package optidb.server.controller;
 
 import optidb.server.model.Platform;
+import optidb.server.platformConnect.MysqlConnect;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,9 @@ public class PlatformRestController {
     public ArrayList <Platform> platformList() {
         ArrayList<Platform> liste = new ArrayList<>();
         String ligne = "";
+        MysqlConnect mysql = new MysqlConnect();
+        mysql.dockerRun();
+        mysql.connect();
 
         try
         {
