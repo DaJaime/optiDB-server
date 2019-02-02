@@ -1,6 +1,8 @@
 package optidb.server.controller;
 
 import optidb.server.model.Platform;
+import optidb.server.model.Resultat;
+import optidb.server.platformConnect.MysqlConnect;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,20 +12,27 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+
 @RestController
 public class PlatformRestController {
 
     @RequestMapping("/platform")
-    public Platform platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name) {
+    public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name) {
         name = name.toLowerCase();
-        return new Platform(name, "0");
+        switch (name) {
+            case "mysql":
+                MysqlConnect mysql = new MysqlConnect();
+                return mysql.test(name);
+            default:
+                break;
+        }
+        return new Resultat(name, 0, 0,0);
     }
 
     @RequestMapping("/list")
     public ArrayList <Platform> platformList() {
         ArrayList<Platform> liste = new ArrayList<>();
         String ligne = "";
-
         try
         {
             // Création de la commande
@@ -34,7 +43,6 @@ public class PlatformRestController {
             ligne = reader.readLine();
             // On lis les autres lignes, un crée une Platform par ligne que l'on ajoute à la liste des Platform
             while ((ligne = reader.readLine()) != null) {
-                System.out.println(ligne);
                 String [] tab = ligne.split(" ");
                 liste.add(new Platform(tab[0], tab[15]));
             }
