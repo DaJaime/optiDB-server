@@ -14,7 +14,7 @@ public class MysqlConnect {
         try {
             Process process = Runtime.getRuntime().exec("docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=test -d mysql:8.0.14");
             process.waitFor();
-            Thread.sleep(17000);
+            Thread.sleep(16000);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -75,10 +75,10 @@ public class MysqlConnect {
             if (cx != null) cx.close();
             Process processClose = Runtime.getRuntime().exec("docker stop mysql");
             processClose.waitFor();
-            Thread.sleep(5000);
+            Thread.sleep(4000);
             Process processRm = Runtime.getRuntime().exec("docker rm mysql");
             processRm.waitFor();
-            Thread.sleep(10000);
+            Thread.sleep(8000);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -98,18 +98,38 @@ public class MysqlConnect {
         this.createTable(cx);
         long fin = System.currentTimeMillis();
         long tempsCreate= fin - debut;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // Isert
         debut = System.currentTimeMillis();
         this.insertOneLine(cx);
         fin = System.currentTimeMillis();
         long tempsInsert = fin - debut;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // Delete
         debut = System.currentTimeMillis();
         this.deleteOneLine(cx);
         fin = System.currentTimeMillis();
         long tempsDelete = fin - debut;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //On ferme la connection
         this.dockerClose(cx);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // on récup le résultat
         return new Resultat(nameBD, tempsCreate, tempsInsert, tempsDelete);
     }
