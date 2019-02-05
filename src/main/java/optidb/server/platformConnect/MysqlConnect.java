@@ -7,8 +7,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Logger;
 
 public class MysqlConnect {
+    private static Logger myLog = Logger.getLogger("WarningLogging");
 
     private void dockerRun () {
         try {
@@ -16,9 +18,10 @@ public class MysqlConnect {
             process.waitFor();
             Thread.sleep(16000);
         } catch (IOException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
+
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             Thread.currentThread().interrupt();
         }
     }
@@ -40,12 +43,19 @@ public class MysqlConnect {
     }
 
     private void executeUpdate (Connection cx, String requete){
+        Statement stmt = null;
         try {
-            Statement stmt = cx.createStatement();
+            stmt = cx.createStatement();
             stmt.executeUpdate(requete);
-            stmt.close();
         } catch (SQLException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
+        }
+        finally {
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException e) {
+                myLog.warning(e.toString());
+            }
         }
     }
 
@@ -75,13 +85,13 @@ public class MysqlConnect {
             processRm.waitFor();
             Thread.sleep(8000);
         } catch (IOException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             Thread.currentThread().interrupt();
         } catch (SQLException e) {
             System.out.println("Close connection");
-            e.printStackTrace();
+            myLog.warning(e.toString());
         }
     }
 
@@ -97,7 +107,7 @@ public class MysqlConnect {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             Thread.currentThread().interrupt();
         }
         // Isert
@@ -108,7 +118,7 @@ public class MysqlConnect {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             Thread.currentThread().interrupt();
         }
         // Delete
@@ -119,7 +129,7 @@ public class MysqlConnect {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             Thread.currentThread().interrupt();
         }
         //On ferme la connection
@@ -127,7 +137,7 @@ public class MysqlConnect {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             Thread.currentThread().interrupt();
         }
         // on récup le résultat
