@@ -102,6 +102,7 @@ public class MysqlConnect {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         // Isert
         debut = System.currentTimeMillis();
@@ -112,6 +113,7 @@ public class MysqlConnect {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         // Delete
         debut = System.currentTimeMillis();
@@ -122,6 +124,7 @@ public class MysqlConnect {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         //On ferme la connection
         this.dockerClose(cx);
@@ -129,6 +132,7 @@ public class MysqlConnect {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
         // on récup le résultat
         return new Resultat(nameBD, tempsCreate, tempsInsert, tempsDelete);
