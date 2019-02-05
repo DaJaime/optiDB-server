@@ -26,48 +26,43 @@ public class MysqlConnect {
     private Connection connect () {
         String driver = "com.mysql.cj.jdbc.Driver";
         Connection cx = null;
-        Statement stmt = null;
         try {
             Class.forName(driver);
             cx = DriverManager.getConnection("jdbc:mysql://172.17.0.2:3306/test","root","pass");
         }
         catch (ClassNotFoundException e) { // classe du pilote introuvable
-            System.out.println(e);
+            System.out.println(e.getMessage());
         }
         catch (SQLException e) { // accès à la base refusé
-            System.out.println(e);
+            System.out.println("SQL : " + e.getMessage());
         }
         return cx;
     }
 
-    private void createTable(Connection cx){
-        String requete = "CREATE TABLE table_test (id INTEGER(10), nom VARCHAR(100), prenom VARCHAR(100))";
+    private void executeUpdate (Connection cx, String requete){
         try {
             Statement stmt = cx.createStatement();
             stmt.executeUpdate(requete);
+            stmt.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private void createTable(Connection cx){
+        String requete = "CREATE TABLE table_test (id INTEGER(10), nom VARCHAR(100), prenom VARCHAR(100))";
+        executeUpdate(cx, requete);
     }
 
     private void insertOneLine(Connection cx){
         String requete = "INSERT INTO table_test values('1','toto','tata')";
-        try {
-            Statement stmt = cx.createStatement();
-            stmt.executeUpdate(requete);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        executeUpdate(cx, requete);
+
     }
 
     private void deleteOneLine(Connection cx){
         String requete = "DELETE FROM table_test WHERE id = '1'";
-        try {
-            Statement stmt = cx.createStatement();
-            stmt.executeUpdate(requete);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        executeUpdate(cx, requete);
     }
 
     private void dockerClose(Connection cx) {
@@ -85,6 +80,7 @@ public class MysqlConnect {
             e.printStackTrace();
             Thread.currentThread().interrupt();
         } catch (SQLException e) {
+            System.out.println("Close connection");
             e.printStackTrace();
         }
     }
