@@ -4,6 +4,7 @@ import optidb.server.model.Platform;
 import optidb.server.model.Resultat;
 import optidb.server.platformConnect.MysqlConnect;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,12 +12,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 
 
 @RestController
 public class PlatformRestController {
+    private static Logger myLog = Logger.getLogger("WarningLogging");
 
-    @RequestMapping("/platform")
+    @RequestMapping(value = "/platform", method = RequestMethod.GET)
     public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name) {
         name = name.toLowerCase();
         switch (name) {
@@ -29,7 +32,7 @@ public class PlatformRestController {
         return new Resultat(name, 0, 0,0);
     }
 
-    @RequestMapping("/list")
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
     public ArrayList <Platform> platformList() {
         ArrayList<Platform> liste = new ArrayList<>();
         String ligne = "";
@@ -50,10 +53,10 @@ public class PlatformRestController {
         }
         catch (IOException e)
         {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             return null;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            myLog.warning(e.toString());
             Thread.currentThread().interrupt();
             return null;
         }
