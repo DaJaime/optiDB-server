@@ -29,7 +29,7 @@ public class PlatformRestController {
             default:
                 break;
         }
-        return new Resultat(name, 0, 0,0);
+        return new Resultat(name, 0, 0,0,0,0, 0, 0);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
