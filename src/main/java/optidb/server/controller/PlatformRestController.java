@@ -20,16 +20,16 @@ public class PlatformRestController {
     private static Logger myLog = Logger.getLogger("WarningLogging");
 
     @RequestMapping(value = "/platform", method = RequestMethod.GET)
-    public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name) {
+    public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name, @RequestParam(value="col", defaultValue="0") int nbCol) {
         name = name.toLowerCase();
         switch (name) {
             case "mysql":
                 MysqlConnect mysql = new MysqlConnect();
-                return mysql.test(name);
+                return mysql.test(name, nbCol);
             default:
                 break;
         }
-        return new Resultat(name, 0, 0,0,0,0, 0, 0);
+        return new Resultat(name, 0, 0,0,0, 0,0, 0, 0);
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)

@@ -7,10 +7,11 @@ public class Resultat {
     private final long tempsUpdate;
     private final long tempsAlter;
     private final long tempsDelete;
+    private final long tempsSelectAll;
     private final long tempsSelect;
     private final long tempsDrop;
 
-    public Resultat(String platformName, long tempsCreate, long tempsInsert, long tempsUpdate, long tempsSelect, long tempsAlter, long tempsDelete, long tempsDrop) {
+    public Resultat(String platformName, long tempsCreate, long tempsInsert, long tempsUpdate, long tempsSelect, long tempsSelectAll, long tempsAlter, long tempsDelete, long tempsDrop) {
         this.platformName = platformName;
         this.tempsCreate = tempsCreate;
         this.tempsInsert = tempsInsert;
@@ -18,6 +19,7 @@ public class Resultat {
         this.tempsAlter = tempsAlter;
         this.tempsDelete = tempsDelete;
         this.tempsSelect = tempsSelect;
+        this.tempsSelectAll = tempsSelectAll;
         this.tempsDrop = tempsDrop;
     }
 
@@ -38,6 +40,8 @@ public class Resultat {
     }
 
     public long getTempsSelect() { return tempsSelect; }
+
+    public long getTempsSelectAll() { return tempsSelectAll; }
 
     public long getTempsDelete() { return tempsDelete; }
 
