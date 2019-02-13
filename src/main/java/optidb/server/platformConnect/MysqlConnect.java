@@ -4,6 +4,7 @@ import optidb.server.model.Resultat;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class MysqlConnect {
@@ -122,7 +123,37 @@ public class MysqlConnect {
             Thread.currentThread().interrupt();
         }
         return fin - debut;
+    }
 
+    private ArrayList insertAllLine(Connection cx, int nbCol, int nbLine){
+        ArrayList listeInsert = new ArrayList();
+        for (int y = 1; y<nbLine+1;y++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("INSERT INTO table_test values('").append(y).append("'");
+            if (nbCol > 1) {
+                for (int i = 1; i < nbCol; i++) {
+                    sb.append(",'info").append(i).append("'");
+                }
+            }
+            sb.append(")");
+            //On ajoute le temps à la liste tout les 10% pour voir l'évolution
+            double prct = ((100.0 * (double) y) / (double) nbLine);
+            if(prct % 10 == 0) {
+                long debut = System.currentTimeMillis();
+                executeUpdate(cx, sb.toString());
+                long fin = System.currentTimeMillis();
+                listeInsert.add(fin - debut);
+            }
+        }
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return listeInsert;
     }
 
     private long updateOneLine(Connection cx){
@@ -241,7 +272,7 @@ public class MysqlConnect {
         }
     }
 
-    public Resultat test(String nameBD, int nbCol){
+    public Resultat test(String nameBD, int nbCol, int nbLine){
         // Init
         this.dockerRun();
         Connection cx = this.connect();
@@ -250,7 +281,7 @@ public class MysqlConnect {
         // Create
         long tempsCreate = this.createTable(cx, nbCol);
         // Isert
-        long tempsInsert = this.insertOneLine(cx, nbCol);
+        ArrayList listeInsert = this.insertAllLine(cx, nbCol, nbLine);
         // Update
         long tempsUpdate = this.updateOneLine(cx);
         // Select
@@ -268,7 +299,7 @@ public class MysqlConnect {
         this.dockerClose(cx);
 
         // on récup le résultat
-        return new Resultat(nameBD, tempsCreate, tempsInsert, tempsUpdate, tempsSelectOne, tempsSelectAll, tempsAlter, tempsDelete ,tempsDrop);
+        return new Resultat(nameBD, nbCol, nbLine, tempsCreate, listeInsert, tempsUpdate, tempsSelectOne, tempsSelectAll, tempsAlter, tempsDelete ,tempsDrop);
     }
 
 
