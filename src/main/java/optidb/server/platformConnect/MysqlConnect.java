@@ -3,10 +3,8 @@ package optidb.server.platformConnect;
 import optidb.server.model.Resultat;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.logging.Logger;
 
 public class MysqlConnect {
@@ -16,7 +14,7 @@ public class MysqlConnect {
         try {
             Process process = Runtime.getRuntime().exec("docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=pass -e MYSQL_DATABASE=test -d mysql:8.0.14");
             process.waitFor();
-            Thread.sleep(16000);
+            Thread.sleep(20000);
         } catch (IOException e) {
             myLog.warning(e.toString());
 
@@ -59,20 +57,199 @@ public class MysqlConnect {
         }
     }
 
-    private void createTable(Connection cx){
-        String requete = "CREATE TABLE table_test (id INTEGER(10), nom VARCHAR(100), prenom VARCHAR(100))";
-        executeUpdate(cx, requete);
+    private void executeQuery (Connection cx, String requete){
+        Statement stmt = null;
+        try {
+            stmt = cx.createStatement();
+            ResultSet rs = stmt.executeQuery(requete);
+            rs.next();
+        } catch (SQLException e) {
+            myLog.warning(e.toString());
+        }
+        finally {
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException e) {
+                myLog.warning(e.toString());
+            }
+        }
     }
 
-    private void insertOneLine(Connection cx){
-        String requete = "INSERT INTO table_test values('1','toto','tata')";
-        executeUpdate(cx, requete);
+    private long createTable(Connection cx, int nbCol){
+        StringBuilder sb = new StringBuilder();
+        // On crer autant de collones que demandé
+        sb.append("CREATE TABLE table_test (id INTEGER(10)");
+        if(nbCol>1) {
+            for (int i = 1; i < nbCol; i++) {
+                sb.append(", col").append(i).append(" VARCHAR(100)");
+            }
+        }
+        sb.append(")");
+        // Execution
+        long debut = System.currentTimeMillis();
+        executeUpdate(cx, sb.toString());
+        long fin = System.currentTimeMillis();
 
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
     }
 
-    private void deleteOneLine(Connection cx){
+    private long insertOneLine(Connection cx, int nbCol){
+        StringBuilder sb = new StringBuilder();
+        sb.append("INSERT INTO table_test values('1'");
+        if(nbCol>1) {
+            for (int i = 1; i < nbCol; i++) {
+                sb.append(",'info").append(i).append("'");
+            }
+        }
+        sb.append(")");
+        System.out.println(sb.toString());
+        // Execution
+        long debut = System.currentTimeMillis();
+        executeUpdate(cx, sb.toString());
+        long fin = System.currentTimeMillis();
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
+    }
+
+    private ArrayList insertAllLine(Connection cx, int nbCol, int nbLine){
+        ArrayList listeInsert = new ArrayList();
+        for (int y = 1; y<nbLine+1;y++) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("INSERT INTO table_test values('").append(y).append("'");
+            if (nbCol > 1) {
+                for (int i = 1; i < nbCol; i++) {
+                    sb.append(",'info").append(i).append("'");
+                }
+            }
+            sb.append(")");
+            //On ajoute le temps à la liste tout les 10% pour voir l'évolution
+            double prct = ((100.0 * (double) y) / (double) nbLine);
+            if(prct % 10 == 0) {
+                long debut = System.currentTimeMillis();
+                executeUpdate(cx, sb.toString());
+                long fin = System.currentTimeMillis();
+                listeInsert.add(fin - debut);
+            }
+        }
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return listeInsert;
+    }
+
+    private long updateOneLine(Connection cx){
+        String requete = "UPDATE table_test SET id = '2' WHERE id=1";
+        long debut = System.currentTimeMillis();
+        executeUpdate(cx, requete);
+        long fin = System.currentTimeMillis();
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
+    }
+
+    private long alterTable(Connection cx){
+        String requete = "ALTER TABLE table_test ADD newCol VARCHAR(255)";
+        long debut = System.currentTimeMillis();
+        executeUpdate(cx, requete);
+        long fin = System.currentTimeMillis();
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
+    }
+
+    private long deleteOneLine(Connection cx){
         String requete = "DELETE FROM table_test WHERE id = '1'";
+        long debut = System.currentTimeMillis();
         executeUpdate(cx, requete);
+        long fin = System.currentTimeMillis();
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
+    }
+
+    private long selectOneLine(Connection cx){
+        String requete = "SELECT * FROM table_test WHERE id = '1'";
+        long debut = System.currentTimeMillis();
+        executeQuery(cx, requete);
+        long fin = System.currentTimeMillis();
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
+    }
+
+    private long selectAll(Connection cx){
+        String requete = "SELECT * FROM table_test";
+        long debut = System.currentTimeMillis();
+        executeQuery(cx, requete);
+        long fin = System.currentTimeMillis();
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
+    }
+
+    private long dropTable(Connection cx){
+        String requete = "DROP TABLE table_test";
+        long debut = System.currentTimeMillis();
+        executeUpdate(cx, requete);
+        long fin = System.currentTimeMillis();
+
+        // On attend une demi seconde
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            myLog.warning(e.toString());
+            Thread.currentThread().interrupt();
+        }
+        return fin - debut;
     }
 
     private void dockerClose(Connection cx) {
@@ -83,7 +260,7 @@ public class MysqlConnect {
             Thread.sleep(4000);
             Process processRm = Runtime.getRuntime().exec("docker rm mysql");
             processRm.waitFor();
-            Thread.sleep(8000);
+            Thread.sleep(4000);
         } catch (IOException e) {
             myLog.warning(e.toString());
         } catch (InterruptedException e) {
@@ -95,53 +272,34 @@ public class MysqlConnect {
         }
     }
 
-    public Resultat test(String nameBD){
+    public Resultat test(String nameBD, int nbCol, int nbLine){
         // Init
         this.dockerRun();
         Connection cx = this.connect();
+
         //On commence les tests
-        long debut = System.currentTimeMillis();
-        this.createTable(cx);
-        long fin = System.currentTimeMillis();
-        long tempsCreate= fin - debut;
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            myLog.warning(e.toString());
-            Thread.currentThread().interrupt();
-        }
+        // Create
+        long tempsCreate = this.createTable(cx, nbCol);
         // Isert
-        debut = System.currentTimeMillis();
-        this.insertOneLine(cx);
-        fin = System.currentTimeMillis();
-        long tempsInsert = fin - debut;
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            myLog.warning(e.toString());
-            Thread.currentThread().interrupt();
-        }
+        ArrayList listeInsert = this.insertAllLine(cx, nbCol, nbLine);
+        // Update
+        long tempsUpdate = this.updateOneLine(cx);
+        // Select
+        long tempsSelectOne = this.selectOneLine(cx);
+        // Select All table
+        long tempsSelectAll = this.selectAll(cx);
+        // Alter
+        long tempsAlter = this.alterTable(cx);
         // Delete
-        debut = System.currentTimeMillis();
-        this.deleteOneLine(cx);
-        fin = System.currentTimeMillis();
-        long tempsDelete = fin - debut;
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            myLog.warning(e.toString());
-            Thread.currentThread().interrupt();
-        }
+        long tempsDelete = this.deleteOneLine(cx);
+        // Drop
+        long tempsDrop = this.dropTable(cx);
+
         //On ferme la connection
         this.dockerClose(cx);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            myLog.warning(e.toString());
-            Thread.currentThread().interrupt();
-        }
+
         // on récup le résultat
-        return new Resultat(nameBD, tempsCreate, tempsInsert, tempsDelete);
+        return new Resultat(nameBD, nbCol, nbLine, tempsCreate, listeInsert, tempsUpdate, tempsSelectOne, tempsSelectAll, tempsAlter, tempsDelete ,tempsDrop);
     }
 
 

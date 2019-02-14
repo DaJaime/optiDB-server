@@ -5,5 +5,6 @@ sudo apt -y install openjdk-8-jdk
 sudo apt -y install maven
 # Docker
 docker pull mysql:8.0.14
-
+# Docker MongoDB
+docker pull mongo:3.4.19
 echo "########"
