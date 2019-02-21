@@ -138,8 +138,7 @@ public class MysqlConnect {
             sb.append(")");
             //On ajoute le temps à la liste tout les 10% pour voir l'évolution
             double prct = ((100.0 * (double) y) / (double) nbLine);
-            long  newPrct = Math.round(prct);
-            if(newPrct % 10 == 0) {
+            if(prct % 10 == 0) {
                 long debut = System.currentTimeMillis();
                 executeUpdate(cx, sb.toString());
                 long fin = System.currentTimeMillis();
