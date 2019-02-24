@@ -48,7 +48,32 @@ public class PlatformRestController {
             // On lis les autres lignes, un crée une Platform par ligne que l'on ajoute à la liste des Platform
             while ((ligne = reader.readLine()) != null) {
                 String [] tab = ligne.split(" ");
-                liste.add(new Platform(tab[0], tab[15]));
+                Platform obj = new Platform(tab[0], tab[15]);
+                if(tab[0].matches("mysql")) {
+                    obj.setDescription("MySQL est un serveur de bases de données relationnelles Open Source.\n \n Un serveur de bases de données stocke les données dans des tables séparées plutôt que de tout rassembler dans une seule table. Cela améliore la rapidité et la souplesse de l'ensemble. Les tables sont reliées par des relations définies, qui rendent possible la combinaison de données entre plusieurs tables durant une requête. Le SQL dans 'MySQL' signifie 'Structured Query Language' : le langage standard pour les traitements de bases de données.");
+                    obj.setTypeModel("Relationnel");obj.setLogo("https://upload.wikimedia.org/wikipedia/fr/thumb/6/62/MySQL.svg/220px-MySQL.svg.png");
+                    obj.setWebsite("https://www.mysql.com/fr/");obj.setDeveloper("Oracle");obj.setInitialRelease("1995");
+                    obj.setLicense("Open Source - GPL v2");obj.setRequetage("SQL"); obj.setName("MySQL");
+                }
+                if(tab[0].matches("postgres")) {
+                    obj.setDescription("PostgreSQL est un Système de Gestion de Base de Données (SBGD) libre disponible sous licence BSD. Ce système multi-plateforme est largement connu et réputé à travers le monde, notamment pour son comportement stable et pour être très respectueux des normes ANSI SQL. Ce projet libre n’est pas géré par une entreprise mais par une communauté de développeurs.\\nLa première version de PostgreSQL date de 1996. A l’origine il s’agit de la base de données Ingres, développé par Michael Stonebraker, qui a été reprogrammé de zéro en 1985 sous le nom Postgres (post-ingres). SQL a été ajouté à Postgres en 1995 sous le nom de projet Postgres95 et le nom à évolué en PostgreSQL en 1996.");
+                    obj.setTypeModel("Relationnel");obj.setLogo("http://www.impulsmap.fr/wp-content/uploads/2016/07/LogoPostgreSql100reel.png");
+                    obj.setWebsite("https://www.postgresql.org/");obj.setDeveloper("PostgreSQL United States");obj.setInitialRelease("1989");
+                    obj.setLicense("License BSD");obj.setRequetage("SQL"); obj.setName("PostGreSQL");
+                }
+                if(tab[0].matches("mariadb")) {
+                    obj.setDescription("MariaDB est un Système de Gestion de Base de Données (SGBD) disponible sous licence GPL. Ce système est un fork de MySQL, ce qui signifie que c’est un nouveau logiciel créé à partir du code source de MySQL.\\n\\nLe projet a été lancé par l’entreprise Monty Program AB et sa maintenance est assurée par la fondation MariaDB. Cette fondation est une organisation à but non lucrative qui permet de s’assurer que le projet restera libre et qu’il y a une protection légale autour du projet.\\nSachant que MySQL a fini par devenir un projet de l’entreprise Oracle, l’informaticien Michael Widenius qui est le principal développeur de MySQL décide de créer MariaDB dans le but de remplacer MySQL et d’assurer une interropérabilité avec celui-ci.");
+                    obj.setTypeModel("Relationnel");obj.setLogo("https://michauko.org/blog/wp-content/uploads/2016/02/logo-Mariadb.png");
+                    obj.setWebsite("https://mariadb.org/");obj.setDeveloper("MariaDB Foundation");obj.setInitialRelease("2009");
+                    obj.setLicense("Open Source - GPL v2");obj.setRequetage("SQL"); obj.setName("MariaDB");
+                }
+                if(tab[0].matches("sqlite3")) {
+                    obj.setDescription("SQLite est un système de base de données qui a la particularité de fonctionner sans serveur, on dit aussi \\\"standalone\\\" ou \\\"base de données embarquée\\\". On peut l'utiliser avec beaucoup de langages : PHP, Python, C# (.NET), Java, C/C++, Delphi, Ruby...\\nL'intérêt c'est que c'est très léger et rapide à mettre en place, on peut s'en servir aussi bien pour stocker des données dans une vraie base de données sur une application pour smartphone (iPhone ou Android), pour une application Windows, ou sur un serveur web.\\nUne base de données SQLite est bien plus performante et facile à utiliser que de stocker les données dans des fichiers XML ou binaires.");
+                    obj.setTypeModel("Relationnel");obj.setLogo("https://sql.sh/wp-content/uploads/2014/04/sqlite-sgbd-500px.png");
+                    obj.setWebsite("https://www.sqlite.org/index.html");obj.setDeveloper("Dwayne Richard Hipp");obj.setInitialRelease("2000");
+                    obj.setLicense("Domaine public");obj.setRequetage("SQL"); obj.setName("SQLite");
+                }
+                liste.add(obj);
             }
             process.waitFor();
         }
