@@ -3,6 +3,7 @@ package optidb.server.controller;
 import optidb.server.model.Platform;
 import optidb.server.model.Resultat;
 import optidb.server.model.SqlTest;
+import optidb.server.platformConnect.MariadbConnect;
 import optidb.server.platformConnect.MysqlConnect;
 import optidb.server.platformConnect.PostgresConnect;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,9 @@ public class PlatformRestController {
             case "postgres":
                 PostgresConnect postgres = new PostgresConnect();
                 return sqlTest.test(postgres,name, nbCol, nbLine);
+            case "mariadb":
+                MariadbConnect mariadb = new MariadbConnect();
+                return sqlTest.test(mariadb,name, nbCol, nbLine);
             default:
                 break;
         }

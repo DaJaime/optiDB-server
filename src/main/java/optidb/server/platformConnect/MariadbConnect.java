@@ -27,14 +27,9 @@ public class MariadbConnect implements InterfaceConnect {
 
     @Override
     public Connection connect() {
-        String driver = "com.mysql.cj.jdbc.Driver";
         Connection cx = null;
         try {
-            Class.forName(driver);
             cx = DriverManager.getConnection("jdbc:mariadb://172.17.0.2:3306/test","root","pass");
-        }
-        catch (ClassNotFoundException e) { // classe du pilote introuvable
-            System.out.println(e.getMessage());
         }
         catch (SQLException e) { // accès à la base refusé
             System.out.println("SQL : " + e.getMessage());
