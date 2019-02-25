@@ -7,4 +7,6 @@ sudo apt -y install maven
 docker pull mysql:8.0.14
 # Docker postgres
 docker pull postgres:11.2
+# Docker mariaDB
+docker pull mariadb:10.4
 echo "########"
