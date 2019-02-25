@@ -23,19 +23,22 @@ public class PlatformRestController {
     private static Logger myLog = Logger.getLogger("WarningLogging");
 
     @RequestMapping(value = "/platform", method = RequestMethod.GET)
-    public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name, @RequestParam(value="col", defaultValue="0") int nbCol, @RequestParam(value="line", defaultValue="0") int nbLine) {
+    public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name,
+                                    @RequestParam(value="col", defaultValue="0") int nbCol,
+                                    @RequestParam(value="line", defaultValue="0") int nbLine,
+                                    @RequestParam(value="cle", defaultValue="0") int cle) {
         name = name.toLowerCase();
         SqlTest sqlTest = new SqlTest();
         switch (name) {
             case "mysql":
                 MysqlConnect mysql = new MysqlConnect();
-                return sqlTest.test(mysql,name, nbCol, nbLine);
+                return sqlTest.test(mysql,name, nbCol, nbLine, cle);
             case "postgres":
                 PostgresConnect postgres = new PostgresConnect();
-                return sqlTest.test(postgres,name, nbCol, nbLine);
+                return sqlTest.test(postgres,name, nbCol, nbLine, cle);
             case "mariadb":
                 MariadbConnect mariadb = new MariadbConnect();
-                return sqlTest.test(mariadb,name, nbCol, nbLine);
+                return sqlTest.test(mariadb,name, nbCol, nbLine, cle);
             default:
                 break;
         }

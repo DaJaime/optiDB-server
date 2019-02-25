@@ -45,10 +45,15 @@ public class SqlTest {
         }
     }
 
-    private long createTable(Connection cx, int nbCol){
+    private long createTable(Connection cx, int nbCol, int cle){
         StringBuilder sb = new StringBuilder();
         // On crer autant de collones que demandé
-        sb.append("CREATE TABLE table_test (id INT");
+        if(cle == 0) {
+            sb.append("CREATE TABLE table_test (id INT");
+        }
+        else {
+            sb.append("CREATE TABLE table_test (id INT PRIMARY KEY NOT NULL");
+        }
         if(nbCol>1) {
             for (int i = 1; i < nbCol; i++) {
                 sb.append(", col").append(i).append(" VARCHAR(100)");
@@ -129,8 +134,8 @@ public class SqlTest {
         return listeInsert;
     }
 
-    private long updateOneLine(Connection cx){
-        String requete = "UPDATE table_test SET id = '2' WHERE id=1";
+    private long updateOneLine(Connection cx, int nbLine){
+        String requete = "UPDATE table_test SET id = '"+nbLine+1+"' WHERE id=1";
         long debut = System.currentTimeMillis();
         executeUpdate(cx, requete);
         long fin = System.currentTimeMillis();
@@ -225,18 +230,18 @@ public class SqlTest {
         return fin - debut;
     }
 
-    public Resultat test(InterfaceConnect platform, String nameBD, int nbCol, int nbLine){
+    public Resultat test(InterfaceConnect platform, String nameBD, int nbCol, int nbLine, int cle){
         // Init
         platform.dockerRun();
         Connection cx = platform.connect();
 
         //On commence les tests
         // Create
-        long tempsCreate = this.createTable(cx, nbCol);
+        long tempsCreate = this.createTable(cx, nbCol, cle);
         // Isert
         ArrayList listeInsert = this.insertAllLine(cx, nbCol, nbLine);
         // Update
-        long tempsUpdate = this.updateOneLine(cx);
+        long tempsUpdate = this.updateOneLine(cx, nbLine);
         // Select
         long tempsSelectOne = this.selectOneLine(cx);
         // Select All table
