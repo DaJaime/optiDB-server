@@ -15,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -58,7 +59,13 @@ public class PlatformRestController {
             // On lis les autres lignes, un crée une Platform par ligne que l'on ajoute à la liste des Platform
             while ((ligne = reader.readLine()) != null) {
                 String [] tab = ligne.split(" ");
-                Platform obj = new Platform(tab[0], tab[15]);
+                List<String> elements = new ArrayList<>();
+                for(int i = 0;i<tab.length;i++) {
+                    if(tab[i].length()>0) {
+                        elements.add(tab[i]);
+                    }
+                }
+                Platform obj = new Platform(elements.get(0), elements.get(1));
                 if(tab[0].matches("mysql")) {
                     obj.setDescription("MySQL est un serveur de bases de données relationnelles Open Source.\n \n Un serveur de bases de données stocke les données dans des tables séparées plutôt que de tout rassembler dans une seule table. Cela améliore la rapidité et la souplesse de l'ensemble. Les tables sont reliées par des relations définies, qui rendent possible la combinaison de données entre plusieurs tables durant une requête. Le SQL dans 'MySQL' signifie 'Structured Query Language' : le langage standard pour les traitements de bases de données.");
                     obj.setTypeModel("Relationnel");obj.setLogo("https://upload.wikimedia.org/wikipedia/fr/thumb/6/62/MySQL.svg/220px-MySQL.svg.png");
