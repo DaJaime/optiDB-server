@@ -2,7 +2,10 @@ package optidb.server.controller;
 
 import optidb.server.model.Platform;
 import optidb.server.model.Resultat;
+import optidb.server.model.SqlTest;
+import optidb.server.platformConnect.MariadbConnect;
 import optidb.server.platformConnect.MysqlConnect;
+import optidb.server.platformConnect.PostgresConnect;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,10 +25,17 @@ public class PlatformRestController {
     @RequestMapping(value = "/platform", method = RequestMethod.GET)
     public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name, @RequestParam(value="col", defaultValue="0") int nbCol, @RequestParam(value="line", defaultValue="0") int nbLine) {
         name = name.toLowerCase();
+        SqlTest sqlTest = new SqlTest();
         switch (name) {
             case "mysql":
                 MysqlConnect mysql = new MysqlConnect();
-                return mysql.test(name, nbCol, nbLine);
+                return sqlTest.test(mysql,name, nbCol, nbLine);
+            case "postgres":
+                PostgresConnect postgres = new PostgresConnect();
+                return sqlTest.test(postgres,name, nbCol, nbLine);
+            case "mariadb":
+                MariadbConnect mariadb = new MariadbConnect();
+                return sqlTest.test(mariadb,name, nbCol, nbLine);
             default:
                 break;
         }
