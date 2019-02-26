@@ -3,12 +3,16 @@ package optidb.server.controller;
 import optidb.server.model.Platform;
 import optidb.server.model.Resultat;
 import optidb.server.platformConnect.MysqlConnect;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.BufferedReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -22,9 +26,13 @@ public class PlatformRestController {
     @RequestMapping(value = "/platform", method = RequestMethod.GET)
     public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name, @RequestParam(value="col", defaultValue="0") int nbCol, @RequestParam(value="line", defaultValue="0") int nbLine) {
         name = name.toLowerCase();
+        Resultat r;
         switch (name) {
             case "mysql":
                 MysqlConnect mysql = new MysqlConnect();
+                System.out.println(mysql.test(name, nbCol, nbLine));
+                r = mysql.test(name, nbCol, nbLine);
+                this.jsonCreate(r);
                 return mysql.test(name, nbCol, nbLine);
             default:
                 break;
@@ -65,4 +73,33 @@ public class PlatformRestController {
         return liste;
     }
 
+
+    private void jsonCreate (Resultat res)
+    {
+        JSONObject obj = new JSONObject();
+        JSONArray list = new JSONArray();
+        try
+        {
+            list.put(3);
+            obj.put("messages", list);
+            obj.put("name", "mkyong.com");
+            obj.put("age", new Integer(100));
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.toString() + "Erreur json");
+        }
+
+
+        try (FileWriter file = new FileWriter("test.json")) {
+
+            file.write(obj.toString());
+            file.flush();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        System.out.print(obj);
+    }
 }
