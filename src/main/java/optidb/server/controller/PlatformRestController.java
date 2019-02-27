@@ -15,8 +15,15 @@ import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -30,10 +37,9 @@ public class PlatformRestController {
         switch (name) {
             case "mysql":
                 MysqlConnect mysql = new MysqlConnect();
-                System.out.println(mysql.test(name, nbCol, nbLine));
                 r = mysql.test(name, nbCol, nbLine);
                 this.jsonCreate(r);
-                return mysql.test(name, nbCol, nbLine);
+                return r;
             default:
                 break;
         }
@@ -74,32 +80,52 @@ public class PlatformRestController {
     }
 
 
+    @RequestMapping(value = "/historique", method = RequestMethod.GET)
+    public ArrayList historiqueList()
+    {
+        ArrayList ls = new ArrayList<>();
+        ls.add("s");
+        return ls;
+    }
+
+
     private void jsonCreate (Resultat res)
     {
         JSONObject obj = new JSONObject();
-        JSONArray list = new JSONArray();
+        JSONArray listeInsert = new JSONArray();
         try
         {
-            list.put(3);
-            obj.put("messages", list);
-            obj.put("name", "mkyong.com");
-            obj.put("age", new Integer(100));
+            for(int i=0;i< res.getListeInsert().size();i++)
+            {
+                listeInsert.put(res.getListeInsert().get(i));
+            }
+            obj.put("platformName", res.getPlatformName());
+            obj.put("nbCol", res.getNbCol());
+            obj.put("nbLine", res.getNbLine());
+            obj.put("tempsCreate", res.getTempsCreate());
+            obj.put("listeInsert", listeInsert);
+            obj.put("tempsUpdate", res.getTempsUpdate());
+            obj.put("tempsAlter", res.getTempsAlter());
+            obj.put("tempsDelete", res.getTempsDelete());
+            obj.put("tempsSelectAll", res.getTempsSelectAll());
+            obj.put("tempsSelect", res.getTempsSelect());
+            obj.put("tempsDrop", res.getTempsDrop());
         }
         catch (Exception e)
         {
-            System.out.println(e.toString() + "Erreur json");
+            myLog.warning(e.toString());
         }
 
-
-        try (FileWriter file = new FileWriter("test.json")) {
-
+        DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+        Date date = new Date();
+        try (FileWriter file = new FileWriter( "/home/vagrant/media/"+dateFormat.format(date)+".json"))
+        {
             file.write(obj.toString());
             file.flush();
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        System.out.print(obj);
+        catch (Exception e)
+        {
+            myLog.warning(e.toString());
+        }
     }
 }
