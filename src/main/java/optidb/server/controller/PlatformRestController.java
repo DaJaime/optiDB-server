@@ -11,19 +11,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 
 
 @RestController
@@ -80,14 +73,22 @@ public class PlatformRestController {
     }
 
 
-    @RequestMapping(value = "/historique", method = RequestMethod.GET)
-    public ArrayList historiqueList()
+    @RequestMapping(value = "/media", method = RequestMethod.GET)
+    public ArrayList<String> historiqueList()
     {
-        ArrayList ls = new ArrayList<>();
-        ls.add("s");
+        ArrayList<String> ls = new ArrayList<>();
+        File directory = new File("/vagrant/media");
+        File[] fList = directory.listFiles();
+        if(fList != null)
+        {
+            for (File file : fList)
+            {
+                System.out.println(file.getName());
+                ls.add(file.getName());
+            }
+        }
         return ls;
     }
-
 
     private void jsonCreate (Resultat res)
     {
@@ -118,7 +119,7 @@ public class PlatformRestController {
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
         Date date = new Date();
-        try (FileWriter file = new FileWriter( "/home/vagrant/media/"+dateFormat.format(date)+".json"))
+        try (FileWriter file = new FileWriter( "/vagrant/media/"+res.getPlatformName()+dateFormat.format(date)+".json"))
         {
             file.write(obj.toString());
             file.flush();
