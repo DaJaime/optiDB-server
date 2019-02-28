@@ -7,4 +7,6 @@ sudo apt -y install maven
 docker pull mysql:8.0.14
 # Docker MongoDB
 docker pull mongo:3.4.19
-echo "########"
+# Création du rep historique
+mkdir /home/vagrant/media
+echo "installation terminé"
