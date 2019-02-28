@@ -73,6 +73,7 @@ ENV/
 
 # Ignore directories
 log/*
+media/*
 output
 reports
 
