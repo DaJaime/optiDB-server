@@ -4,8 +4,11 @@ import optidb.server.model.Platform;
 import optidb.server.model.Resultat;
 import optidb.server.platformConnect.MysqlConnect;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.JSONArray;
-import org.json.JSONObject;
+import org.json.simple.parser.ParseException;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,8 +43,45 @@ public class PlatformRestController {
         return new Resultat(name, nbCol, nbLine, 0, listeInsert,0,0, 0,0, 0, 0);
     }
 
+
+    @RequestMapping(value = "/historique", method = RequestMethod.GET)
+    public Resultat historiqueJson(@RequestParam(value="name", defaultValue="Inconu") String name)
+    {
+        Resultat r = null;
+        JSONParser parser = new JSONParser();
+        try
+        {
+            Object obj = parser.parse(new FileReader("/vagrant/media/"+name));
+            JSONObject jsonObject = (JSONObject) obj;
+
+            String platformName = (String) jsonObject.get("platformName");
+            Long nbCol = (Long) jsonObject.get("nbCol");
+            Long nbLigne = (Long) jsonObject.get("nbLine");
+            Long delete = (Long) jsonObject.get("tempsDelete");
+            Long alter = (Long) jsonObject.get("tempsAlter");
+            Long create = (Long) jsonObject.get("tempsCreate");
+            Long select = (Long) jsonObject.get("tempsSelect");
+            Long drop = (Long) jsonObject.get("tempsDrop");
+            Long update = (Long) jsonObject.get("tempsUpdate");
+            Long selectAll = (Long) jsonObject.get("tempsSelectAll");
+            ArrayList listinsert = (ArrayList) jsonObject.get("listeInsert");
+            r = new Resultat(platformName,nbCol.intValue(),nbLigne.intValue(),create,listinsert,update,select,selectAll,alter,delete,drop);
+        }
+        catch (IOException e)
+        {
+            myLog.warning(e.toString());
+        }
+        catch (ParseException e)
+        {
+            myLog.warning(e.toString());
+        }
+        return r;
+    }
+
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ArrayList <Platform> platformList() {
+    public ArrayList <Platform> platformList()
+    {
         ArrayList<Platform> liste = new ArrayList<>();
         String ligne = "";
         try
@@ -83,7 +123,6 @@ public class PlatformRestController {
         {
             for (File file : fList)
             {
-                System.out.println(file.getName());
                 ls.add(file.getName());
             }
         }
