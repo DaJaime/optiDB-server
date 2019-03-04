@@ -13,8 +13,8 @@ public class PlatformTest {
     }
 
     @Test
-    public void getName() throws Exception {
-        assertEquals("Test", platformTest.getName());
+    public void getDocker() throws Exception {
+        assertEquals("Test", platformTest.getDocker());
     }
 
     @Test
