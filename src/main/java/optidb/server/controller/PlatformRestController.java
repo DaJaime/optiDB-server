@@ -1,8 +1,10 @@
 package optidb.server.controller;
 
+import optidb.server.model.MultipleResultat;
 import optidb.server.model.Platform;
 import optidb.server.model.Resultat;
 import optidb.server.model.SqlTest;
+import optidb.server.platformConnect.InterfaceConnect;
 import optidb.server.platformConnect.MariadbConnect;
 import optidb.server.platformConnect.MysqlConnect;
 import org.json.simple.JSONObject;
@@ -10,12 +12,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.simple.parser.ParseException;
 import optidb.server.platformConnect.PostgresConnect;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 public class PlatformRestController {
     private static Logger myLog = Logger.getLogger("WarningLogging");
 
-    @RequestMapping(value = "/platform", method = RequestMethod.GET)
+    @GetMapping(value = "/platform")
     public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name,
                                     @RequestParam(value="col", defaultValue="0") int nbCol,
                                     @RequestParam(value="line", defaultValue="0") int nbLine,
@@ -36,31 +36,35 @@ public class PlatformRestController {
         name = name.toLowerCase();
         SqlTest sqlTest = new SqlTest();
         Resultat r;
-        switch (name) {
-            case "mysql":
-                MysqlConnect mysql = new MysqlConnect();
-                r = sqlTest.test(mysql,name, nbCol, nbLine, cle);
-                this.jsonCreate(r);
-                return r;
-            case "postgres":
-                PostgresConnect postgres = new PostgresConnect();
-                r = sqlTest.test(postgres,name, nbCol, nbLine, cle);
-                this.jsonCreate(r);
-                return r;
-            case "mariadb":
-                MariadbConnect mariadb = new MariadbConnect();
-                r = sqlTest.test(mariadb,name, nbCol, nbLine, cle);
-                this.jsonCreate(r);
-                return r;
-            default:
-                break;
-        }
-        ArrayList listeInsert = new ArrayList();
-        return new Resultat(name, nbCol, nbLine, 0, listeInsert,0,0, 0,0, 0, 0);
-    }
+        InterfaceConnect connect = this.returnConnect(name);
+        r = sqlTest.test(connect,name, nbCol, nbLine, cle);
+        this.jsonCreate(r);
+        return r;
+         }
+
+    @GetMapping(value = "/compare")
+    public MultipleResultat platformVersion(@RequestParam(value="bda", defaultValue="Inconu") String bda,
+                                    @RequestParam(value="bdb", defaultValue="Inconu") String bdb,
+                                    @RequestParam(value="col", defaultValue="0") int nbCol,
+                                    @RequestParam(value="line", defaultValue="0") int nbLine,
+                                    @RequestParam(value="cle", defaultValue="0") int cle) {
+        bda = bda.toLowerCase();
+        bdb = bdb.toLowerCase();
+
+        SqlTest sqlTest = new SqlTest();
+        InterfaceConnect connectA = this.returnConnect(bda);
+        InterfaceConnect connectB = this.returnConnect(bdb);
+        ArrayList<Resultat> listResu = new ArrayList<>();
+        listResu.add(sqlTest.test(connectA,bda, nbCol, nbLine, cle));
+        listResu.add(sqlTest.test(connectB,bdb, nbCol, nbLine, cle));
+        MultipleResultat r = new MultipleResultat(listResu);
+        this.jsonCreate(r.getListResu().get(0));
+        this.jsonCreate(r.getListResu().get(1));
+        return r;
+       }
 
 
-    @RequestMapping(value = "/historique", method = RequestMethod.GET)
+    @GetMapping(value = "/historique")
     public Resultat historiqueJson(@RequestParam(value="name", defaultValue="Inconu") String name)
     {
         Resultat r = null;
@@ -83,20 +87,17 @@ public class PlatformRestController {
             ArrayList listinsert = (ArrayList) jsonObject.get("listeInsert");
             r = new Resultat(platformName,nbCol.intValue(),nbLigne.intValue(),create,listinsert,update,select,selectAll,alter,delete,drop);
         }
-        catch (IOException e)
+        catch (IOException|ParseException e)
         {
             myLog.warning(e.toString());
         }
-        catch (ParseException e)
-        {
-            myLog.warning(e.toString());
-        }
+
         return r;
     }
 
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ArrayList <Platform> platformList()
+    @GetMapping(value = "/list")
+    public List <Platform> platformList()
     {
         ArrayList<Platform> liste = new ArrayList<>();
         String ligne = "";
@@ -160,8 +161,8 @@ public class PlatformRestController {
     }
 
 
-    @RequestMapping(value = "/media", method = RequestMethod.GET)
-    public ArrayList<String> historiqueList()
+    @GetMapping(value = "/media")
+    public List<String> historiqueList()
     {
         ArrayList<String> ls = new ArrayList<>();
         File directory = new File("/vagrant/media");
@@ -174,6 +175,42 @@ public class PlatformRestController {
             }
         }
         return ls;
+    }
+
+    private InterfaceConnect returnConnect (String bd){
+        InterfaceConnect connect;
+        switch (bd) {
+            case "mysql":
+                connect = new MysqlConnect();
+                break;
+            case "postgres":
+                connect = new PostgresConnect();
+                break;
+            case "mariadb":
+                connect = new MariadbConnect();
+                break;
+            default:
+                connect = new InterfaceConnect() {
+                    @Override
+                    public void dockerRun() {
+                        myLog.warning("Base de donnée Inconu, docker run impossible");
+                    }
+
+                    @Override
+                    public Connection connect() {
+                        myLog.warning("Base de donnée Inconu, connect impossible");
+
+                        return null;
+                    }
+
+                    @Override
+                    public void dockerClose(Connection cx) {
+                        myLog.warning("Base de donnée Inconu, docker close impossible");
+                    }
+                };
+                break;
+        }
+        return connect;
     }
 
     private void jsonCreate (Resultat res)

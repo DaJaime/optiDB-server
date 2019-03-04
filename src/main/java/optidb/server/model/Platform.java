@@ -18,7 +18,9 @@ public class Platform {
         this.currentVersion = curr;
     }
 
-    public Platform(String docker, String name, String currentVersion, String description, String typeModel, String logo, String website, String developer, String initialRelease, String license, String requetage) {
+    public Platform(String docker, String name, String currentVersion, String description, String typeModel,
+                    String logo, String website, String developer, String initialRelease, String license,
+                    String requetage) {
         this.docker = docker;
         this.name = name;
         this.currentVersion = currentVersion;
