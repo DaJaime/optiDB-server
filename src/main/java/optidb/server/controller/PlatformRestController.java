@@ -1,8 +1,10 @@
 package optidb.server.controller;
 
+import optidb.server.model.MultipleResultat;
 import optidb.server.model.Platform;
 import optidb.server.model.Resultat;
 import optidb.server.model.SqlTest;
+import optidb.server.platformConnect.InterfaceConnect;
 import optidb.server.platformConnect.MariadbConnect;
 import optidb.server.platformConnect.MysqlConnect;
 import org.json.simple.JSONObject;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.*;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,28 +39,32 @@ public class PlatformRestController {
         name = name.toLowerCase();
         SqlTest sqlTest = new SqlTest();
         Resultat r;
-        switch (name) {
-            case "mysql":
-                MysqlConnect mysql = new MysqlConnect();
-                r = sqlTest.test(mysql,name, nbCol, nbLine, cle);
-                this.jsonCreate(r);
-                return r;
-            case "postgres":
-                PostgresConnect postgres = new PostgresConnect();
-                r = sqlTest.test(postgres,name, nbCol, nbLine, cle);
-                this.jsonCreate(r);
-                return r;
-            case "mariadb":
-                MariadbConnect mariadb = new MariadbConnect();
-                r = sqlTest.test(mariadb,name, nbCol, nbLine, cle);
-                this.jsonCreate(r);
-                return r;
-            default:
-                break;
-        }
-        ArrayList listeInsert = new ArrayList();
-        return new Resultat(name, nbCol, nbLine, 0, listeInsert,0,0, 0,0, 0, 0);
-    }
+        InterfaceConnect connect = this.returnConnect(name);
+        r = sqlTest.test(connect,name, nbCol, nbLine, cle);
+        this.jsonCreate(r);
+        return r;
+         }
+
+    @RequestMapping(value = "/compare", method = RequestMethod.GET)
+    public MultipleResultat platformVersion(@RequestParam(value="bda", defaultValue="Inconu") String bda,
+                                    @RequestParam(value="bdb", defaultValue="Inconu") String bdb,
+                                    @RequestParam(value="col", defaultValue="0") int nbCol,
+                                    @RequestParam(value="line", defaultValue="0") int nbLine,
+                                    @RequestParam(value="cle", defaultValue="0") int cle) {
+        bda = bda.toLowerCase();
+        bdb = bdb.toLowerCase();
+
+        SqlTest sqlTest = new SqlTest();
+        InterfaceConnect connectA = this.returnConnect(bda);
+        InterfaceConnect connectB = this.returnConnect(bdb);
+        ArrayList<Resultat> listResu = new ArrayList<>();
+        listResu.add(sqlTest.test(connectA,bda, nbCol, nbLine, cle));
+        listResu.add(sqlTest.test(connectB,bdb, nbCol, nbLine, cle));
+        MultipleResultat r = new MultipleResultat(listResu);
+        this.jsonCreate(r.getListResu().get(0));
+        this.jsonCreate(r.getListResu().get(1));
+        return r;
+       }
 
 
     @RequestMapping(value = "/historique", method = RequestMethod.GET)
@@ -174,6 +181,42 @@ public class PlatformRestController {
             }
         }
         return ls;
+    }
+
+    private InterfaceConnect returnConnect (String bd){
+        InterfaceConnect connect;
+        switch (bd) {
+            case "mysql":
+                connect = new MysqlConnect();
+                break;
+            case "postgres":
+                connect = new PostgresConnect();
+                break;
+            case "mariadb":
+                connect = new MariadbConnect();
+                break;
+            default:
+                connect = new InterfaceConnect() {
+                    @Override
+                    public void dockerRun() {
+                        myLog.warning("Base de donnée Inconu");
+                    }
+
+                    @Override
+                    public Connection connect() {
+                        myLog.warning("Base de donnée Inconu");
+
+                        return null;
+                    }
+
+                    @Override
+                    public void dockerClose(Connection cx) {
+                        myLog.warning("Base de donnée Inconu");
+                    }
+                };
+                break;
+        }
+        return connect;
     }
 
     private void jsonCreate (Resultat res)
