@@ -2,7 +2,6 @@ package optidb.server.model;
 
 import optidb.server.platformConnect.InterfaceConnect;
 
-import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.logging.Logger;
