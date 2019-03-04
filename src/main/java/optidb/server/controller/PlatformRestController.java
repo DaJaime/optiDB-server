@@ -5,16 +5,21 @@ import optidb.server.model.Resultat;
 import optidb.server.model.SqlTest;
 import optidb.server.platformConnect.MariadbConnect;
 import optidb.server.platformConnect.MysqlConnect;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.JSONArray;
+import org.json.simple.parser.ParseException;
 import optidb.server.platformConnect.PostgresConnect;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Logger;
 
 
@@ -29,16 +34,23 @@ public class PlatformRestController {
                                     @RequestParam(value="cle", defaultValue="0") int cle) {
         name = name.toLowerCase();
         SqlTest sqlTest = new SqlTest();
+        Resultat r;
         switch (name) {
             case "mysql":
                 MysqlConnect mysql = new MysqlConnect();
-                return sqlTest.test(mysql,name, nbCol, nbLine, cle);
+                r = sqlTest.test(mysql,name, nbCol, nbLine, cle);
+                this.jsonCreate(r);
+                return r;
             case "postgres":
                 PostgresConnect postgres = new PostgresConnect();
-                return sqlTest.test(postgres,name, nbCol, nbLine, cle);
+                r = sqlTest.test(postgres,name, nbCol, nbLine, cle);
+                this.jsonCreate(r);
+                return r;
             case "mariadb":
                 MariadbConnect mariadb = new MariadbConnect();
-                return sqlTest.test(mariadb,name, nbCol, nbLine, cle);
+                r = sqlTest.test(mariadb,name, nbCol, nbLine, cle);
+                this.jsonCreate(r);
+                return r;
             default:
                 break;
         }
@@ -46,8 +58,45 @@ public class PlatformRestController {
         return new Resultat(name, nbCol, nbLine, 0, listeInsert,0,0, 0,0, 0, 0);
     }
 
+
+    @RequestMapping(value = "/historique", method = RequestMethod.GET)
+    public Resultat historiqueJson(@RequestParam(value="name", defaultValue="Inconu") String name)
+    {
+        Resultat r = null;
+        JSONParser parser = new JSONParser();
+        try
+        {
+            Object obj = parser.parse(new FileReader("/vagrant/media/"+name));
+            JSONObject jsonObject = (JSONObject) obj;
+
+            String platformName = (String) jsonObject.get("platformName");
+            Long nbCol = (Long) jsonObject.get("nbCol");
+            Long nbLigne = (Long) jsonObject.get("nbLine");
+            Long delete = (Long) jsonObject.get("tempsDelete");
+            Long alter = (Long) jsonObject.get("tempsAlter");
+            Long create = (Long) jsonObject.get("tempsCreate");
+            Long select = (Long) jsonObject.get("tempsSelect");
+            Long drop = (Long) jsonObject.get("tempsDrop");
+            Long update = (Long) jsonObject.get("tempsUpdate");
+            Long selectAll = (Long) jsonObject.get("tempsSelectAll");
+            ArrayList listinsert = (ArrayList) jsonObject.get("listeInsert");
+            r = new Resultat(platformName,nbCol.intValue(),nbLigne.intValue(),create,listinsert,update,select,selectAll,alter,delete,drop);
+        }
+        catch (IOException e)
+        {
+            myLog.warning(e.toString());
+        }
+        catch (ParseException e)
+        {
+            myLog.warning(e.toString());
+        }
+        return r;
+    }
+
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ArrayList <Platform> platformList() {
+    public ArrayList <Platform> platformList()
+    {
         ArrayList<Platform> liste = new ArrayList<>();
         String ligne = "";
         try
@@ -78,4 +127,60 @@ public class PlatformRestController {
         return liste;
     }
 
+
+    @RequestMapping(value = "/media", method = RequestMethod.GET)
+    public ArrayList<String> historiqueList()
+    {
+        ArrayList<String> ls = new ArrayList<>();
+        File directory = new File("/vagrant/media");
+        File[] fList = directory.listFiles();
+        if(fList != null)
+        {
+            for (File file : fList)
+            {
+                ls.add(file.getName());
+            }
+        }
+        return ls;
+    }
+
+    private void jsonCreate (Resultat res)
+    {
+        JSONObject obj = new JSONObject();
+        JSONArray listeInsert = new JSONArray();
+        try
+        {
+            for(int i=0;i< res.getListeInsert().size();i++)
+            {
+                listeInsert.put(res.getListeInsert().get(i));
+            }
+            obj.put("platformName", res.getPlatformName());
+            obj.put("nbCol", res.getNbCol());
+            obj.put("nbLine", res.getNbLine());
+            obj.put("tempsCreate", res.getTempsCreate());
+            obj.put("listeInsert", listeInsert);
+            obj.put("tempsUpdate", res.getTempsUpdate());
+            obj.put("tempsAlter", res.getTempsAlter());
+            obj.put("tempsDelete", res.getTempsDelete());
+            obj.put("tempsSelectAll", res.getTempsSelectAll());
+            obj.put("tempsSelect", res.getTempsSelect());
+            obj.put("tempsDrop", res.getTempsDrop());
+        }
+        catch (Exception e)
+        {
+            myLog.warning(e.toString());
+        }
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+        Date date = new Date();
+        try (FileWriter file = new FileWriter( "/vagrant/media/"+res.getPlatformName()+dateFormat.format(date)+".json"))
+        {
+            file.write(obj.toString());
+            file.flush();
+        }
+        catch (Exception e)
+        {
+            myLog.warning(e.toString());
+        }
+    }
 }
