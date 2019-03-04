@@ -25,7 +25,7 @@ public class MultipleResultatTest {
         ArrayList listeInsert = new ArrayList();
         Resultat newResu = new Resultat("Test",1, 1, 1, listeInsert,
                 1, 1, 1, 1,1, 1);
-        assertEquals(newResu, res.getListResu().get(0));
+        assertEquals(newResu.getClass(), res.getListResu().get(0).getClass());
     }
 
 }
