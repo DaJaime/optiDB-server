@@ -12,10 +12,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.JSONArray;
 import org.json.simple.parser.ParseException;
 import optidb.server.platformConnect.PostgresConnect;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
 import java.sql.Connection;
@@ -31,7 +28,7 @@ import java.util.logging.Logger;
 public class PlatformRestController {
     private static Logger myLog = Logger.getLogger("WarningLogging");
 
-    @RequestMapping(value = "/platform", method = RequestMethod.GET)
+    @GetMapping(value = "/platform")
     public Resultat platformVersion(@RequestParam(value="name", defaultValue="Inconu") String name,
                                     @RequestParam(value="col", defaultValue="0") int nbCol,
                                     @RequestParam(value="line", defaultValue="0") int nbLine,
@@ -45,7 +42,7 @@ public class PlatformRestController {
         return r;
          }
 
-    @RequestMapping(value = "/compare", method = RequestMethod.GET)
+    @GetMapping(value = "/compare")
     public MultipleResultat platformVersion(@RequestParam(value="bda", defaultValue="Inconu") String bda,
                                     @RequestParam(value="bdb", defaultValue="Inconu") String bdb,
                                     @RequestParam(value="col", defaultValue="0") int nbCol,
@@ -67,7 +64,7 @@ public class PlatformRestController {
        }
 
 
-    @RequestMapping(value = "/historique", method = RequestMethod.GET)
+    @GetMapping(value = "/historique")
     public Resultat historiqueJson(@RequestParam(value="name", defaultValue="Inconu") String name)
     {
         Resultat r = null;
@@ -99,7 +96,7 @@ public class PlatformRestController {
     }
 
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @GetMapping(value = "/list")
     public List <Platform> platformList()
     {
         ArrayList<Platform> liste = new ArrayList<>();
@@ -164,7 +161,7 @@ public class PlatformRestController {
     }
 
 
-    @RequestMapping(value = "/media", method = RequestMethod.GET)
+    @GetMapping(value = "/media")
     public List<String> historiqueList()
     {
         ArrayList<String> ls = new ArrayList<>();
@@ -196,19 +193,19 @@ public class PlatformRestController {
                 connect = new InterfaceConnect() {
                     @Override
                     public void dockerRun() {
-                        myLog.warning("Base de donnée Inconu");
+                        myLog.warning("Base de donnée Inconu, docker run impossible");
                     }
 
                     @Override
                     public Connection connect() {
-                        myLog.warning("Base de donnée Inconu");
+                        myLog.warning("Base de donnée Inconu, connect impossible");
 
                         return null;
                     }
 
                     @Override
                     public void dockerClose(Connection cx) {
-                        myLog.warning("Base de donnée Inconu");
+                        myLog.warning("Base de donnée Inconu, docker close impossible");
                     }
                 };
                 break;

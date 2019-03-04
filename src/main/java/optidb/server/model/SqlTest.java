@@ -43,7 +43,7 @@ public class SqlTest {
                 try {
                     rs.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    myLog.warning(e.toString());
                 }
             }
             if (stmt != null) try {
