@@ -90,20 +90,17 @@ public class PlatformRestController {
             ArrayList listinsert = (ArrayList) jsonObject.get("listeInsert");
             r = new Resultat(platformName,nbCol.intValue(),nbLigne.intValue(),create,listinsert,update,select,selectAll,alter,delete,drop);
         }
-        catch (IOException e)
+        catch (IOException|ParseException e)
         {
             myLog.warning(e.toString());
         }
-        catch (ParseException e)
-        {
-            myLog.warning(e.toString());
-        }
+
         return r;
     }
 
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public ArrayList <Platform> platformList()
+    public List <Platform> platformList()
     {
         ArrayList<Platform> liste = new ArrayList<>();
         String ligne = "";
@@ -168,7 +165,7 @@ public class PlatformRestController {
 
 
     @RequestMapping(value = "/media", method = RequestMethod.GET)
-    public ArrayList<String> historiqueList()
+    public List<String> historiqueList()
     {
         ArrayList<String> ls = new ArrayList<>();
         File directory = new File("/vagrant/media");

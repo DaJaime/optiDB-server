@@ -32,7 +32,7 @@ public class MariadbConnect implements InterfaceConnect {
             cx = DriverManager.getConnection("jdbc:mariadb://172.17.0.2:3306/test","root","pass");
         }
         catch (SQLException e) { // accès à la base refusé
-            System.out.println("SQL : " + e.getMessage());
+            myLog.warning(e.toString());
         }
         return cx;
     }
@@ -47,14 +47,11 @@ public class MariadbConnect implements InterfaceConnect {
             Process processRm = Runtime.getRuntime().exec("docker rm mariadb");
             processRm.waitFor();
             Thread.sleep(4000);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             myLog.warning(e.toString());
         } catch (InterruptedException e) {
             myLog.warning(e.toString());
             Thread.currentThread().interrupt();
-        } catch (SQLException e) {
-            System.out.println("Close connection");
-            myLog.warning(e.toString());
         }
     }
 }

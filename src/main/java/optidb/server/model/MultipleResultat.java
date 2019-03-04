@@ -1,15 +1,15 @@
 package optidb.server.model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MultipleResultat {
-    private final ArrayList<Resultat> listResu;
+    private final List<Resultat> listResu;
 
-    public MultipleResultat(ArrayList<Resultat> listResu) {
+    public MultipleResultat(List<Resultat> listResu) {
         this.listResu = listResu;
     }
 
-    public ArrayList<Resultat> getListResu() {
+    public List<Resultat> getListResu() {
         return listResu;
     }
 }

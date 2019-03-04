@@ -41,16 +41,12 @@ public class MysqlConnect implements InterfaceConnect {
             Process processRm = Runtime.getRuntime().exec("docker rm mysql");
             processRm.waitFor();
             Thread.sleep(4000);
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
             myLog.warning(e.toString());
         } catch (InterruptedException e) {
             myLog.warning(e.toString());
             Thread.currentThread().interrupt();
-        } catch (SQLException e) {
-            System.out.println("Close connection");
-            myLog.warning(e.toString());
         }
     }
-
 
 }

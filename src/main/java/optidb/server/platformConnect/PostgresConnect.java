@@ -30,7 +30,7 @@ public class PostgresConnect implements InterfaceConnect {
             cx = DriverManager.getConnection("jdbc:postgresql://172.17.0.2:5432/test","root","pass");
         }
         catch (SQLException e) { // accès à la base refusé
-            System.out.println("SQL : " + e.getMessage());
+            myLog.warning(e.toString());
         }
         return cx;
     }
@@ -45,14 +45,11 @@ public class PostgresConnect implements InterfaceConnect {
             Process processRm = Runtime.getRuntime().exec("docker rm postgres");
             processRm.waitFor();
             Thread.sleep(4000);
-        } catch (IOException e) {
+        } catch (IOException|SQLException e) {
             myLog.warning(e.toString());
         } catch (InterruptedException e) {
             myLog.warning(e.toString());
             Thread.currentThread().interrupt();
-        } catch (SQLException e) {
-            System.out.println("Close connection");
-            myLog.warning(e.toString());
         }
     }
 }

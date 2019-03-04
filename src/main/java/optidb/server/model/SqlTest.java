@@ -32,15 +32,13 @@ public class SqlTest {
             stmt = cx.createStatement();
             ResultSet rs = stmt.executeQuery(requete);
             rs.next();
-        } catch (SQLException e) {
-            myLog.warning(e.toString());
-        }
-        finally {
-            if (stmt != null) try {
+            try {
                 stmt.close();
             } catch (SQLException e) {
                 myLog.warning(e.toString());
             }
+        } catch (SQLException e) {
+            myLog.warning(e.toString());
         }
     }
 
@@ -59,31 +57,6 @@ public class SqlTest {
             }
         }
         sb.append(")");
-        // Execution
-        long debut = System.currentTimeMillis();
-        executeUpdate(cx, sb.toString());
-        long fin = System.currentTimeMillis();
-
-        // On attend une demi seconde
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            myLog.warning(e.toString());
-            Thread.currentThread().interrupt();
-        }
-        return fin - debut;
-    }
-
-    private long insertOneLine(Connection cx, int nbCol){
-        StringBuilder sb = new StringBuilder();
-        sb.append("INSERT INTO table_test values('1'");
-        if(nbCol>1) {
-            for (int i = 1; i < nbCol; i++) {
-                sb.append(",'info").append(i).append("'");
-            }
-        }
-        sb.append(")");
-        System.out.println(sb.toString());
         // Execution
         long debut = System.currentTimeMillis();
         executeUpdate(cx, sb.toString());
