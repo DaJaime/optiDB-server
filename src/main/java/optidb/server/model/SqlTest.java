@@ -27,14 +27,30 @@ public class SqlTest {
     }
 
     private void executeQuery (Connection cx, String requete){
+        Statement stmt = null;
+        ResultSet rs = null;
         try {
-            Statement stmt = cx.createStatement();
-            ResultSet rs = stmt.executeQuery(requete);
+            stmt = cx.createStatement();
+            rs = stmt.executeQuery(requete);
             rs.next();
             rs.close();
             stmt.close();
         } catch (SQLException e) {
             myLog.warning(e.toString());
+        }
+        finally {
+            if (rs != null){
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (stmt != null) try {
+                stmt.close();
+            } catch (SQLException e) {
+                myLog.warning(e.toString());
+            }
         }
     }
 
