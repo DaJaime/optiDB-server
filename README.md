@@ -5,7 +5,6 @@
 [![SonarCloud Coverage](https://sonarcloud.io/api/project_badges/measure?project=optidb.server%3Aoptidb-server&metric=coverage)](https://sonarcloud.io/dashboard?id=optidb.server%3Aoptidb-server)
 [![SonarCloud Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=optidb.server%3Aoptidb-server&metric=sqale_index)](https://sonarcloud.io/dashboard?id=optidb.server%3Aoptidb-server)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=optidb.server%3Aoptidb-server&metric=code_smells)](https://sonarcloud.io/dashboard?id=optidb.server%3Aoptidb-server)
-[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=optidb.server%3Aoptidb-server&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=optidb.server%3Aoptidb-server)
 
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/DaJaime/optiDB-server.svg?columns=all)](https://waffle.io/DaJaime/optiDB-server)
 
