@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>optidb.server</groupId>
 	<artifactId>optidb-server</artifactId>
-	<version>0.3</version>
+	<version>1.0-Alpha</version>
 	<name>optiDB-server</name>
 	<description>optiDB-server in Spring</description>
 
@@ -65,6 +65,16 @@
 			<groupId>com.googlecode.json-simple</groupId>
 			<artifactId>json-simple</artifactId>
 			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.9.2</version>
 		</dependency>
 	</dependencies>
 
