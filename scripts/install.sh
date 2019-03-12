@@ -11,4 +11,5 @@ docker pull postgres:11.2
 docker pull mariadb:10.4
 # Création du rep historique
 mkdir /vagrant/media
+sudo chmod 755 -R /vagrant/scripts/run.sh
 echo "installation terminé"
