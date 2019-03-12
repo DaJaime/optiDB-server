@@ -12,46 +12,62 @@
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/DaJaime/optiDB-server.svg?columns=all)](https://waffle.io/DaJaime/optiDB-server)
 
 
-# OptiDB côté serveur - Projet Master
+# OptiDB-server - Projet Master
 
 ## Prérequis
-* Git, gestionnaire de version - [Télécharger git](https://git-scm.com/downloads)
+* OptiDB-client, la partie client du projet - [Télécharger optiDB-client](https://github.com/ChaudhryHaseeb/optiDB-client)
 * Virtualbox, outil de virtualisation - [Télécharger Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 * Vagrant, gestionnaire de machine virtuelle - [Télécharger vagrant](https://www.vagrantup.com/downloads.html)
 * Télécharger la box du serveur - [Télécharger la box](https://github.com/jose-lpa/packer-ubuntu_lts/releases/download/v3.1/ubuntu-16.04.box)
 
-## Installation
+## Description
+OptiDB est un projet qui test la performance de trois base de données : 
+* Mysql 
+* MariaDB
+* Postgres  
 
-Pour pouvoir lancer la machine virtuelle avec vagrant il faut d'abord récupérer l'image de la box (lien dans les prérequis)
+En indiquant le nombre de colonnes, de lignes et si la table doit contenir ou non une clé primaire, elle va généré un jeu de donnée dans un docker et retourner le temps d'excution des différentes réquêtes.
+Vous vous trouvez sur OptiDB-server qui est l'api rest du projet. C'est cette API qui va retourner les résultats des tests qui seront envoyé vers le projet OptiDB-Client.
+
+# Installer l'image avec vagrant
+
+>Pour pouvoir lancer la machine virtuelle avec vagrant il faut d'abord récupérer l'image de la box (lien dans les prérequis). 
 Il faut aussi que vous ayez vagrant dans le path
 
+1. cd $chemin_vers_la_box
+2. vagrant box add --name optiDB-server ubuntu-16.04.box
+3. Cloner ou télécharger le projet
+    - git clone https://github.com/DaJaime/optiDB-server.git 
+    - télécharger directement le dépôt en cliquant [ici](https://github.com/DaJaime/optiDB-server/archive/master.zip)
+4. vagrant up
+
+# Lancer le serveur
+
 ```bash
-# Installer l'image avec vagrant
-cd $chemin_vers_la_box
-
-vagrant box add --name optiDB-server ubuntu-16.04.box
-
-git clone https://github.com/DaJaime/optiDB-server.git
-
-vagrant up
-```
-
-## Autres commandes
-
-```
-# Démarrrer la VM
-vagrant up
-
-# Eteindre la VM
-vagrant halt
-
-# Supprimer la VM
-vagrant destroy
-
-# Se connecter en ssh à la VM
+# Accéder au shell
 vagrant ssh
 
-# Supprimer une box
-vagrant box remove nomDeLaBox
+# Accéder au répertoire du projet
+cd /vagrant
+
+# Build et installer les dépendances
+mvn clean install
+
+# Executer le serveur
+java -jar target/optidb-server-1.0-Alpha.jar
 
 ```
+
+>Vous devez désormais procédé à l'installation de la partie cliente du projet(liens dans les prérequis).
+
+
+
+
+
+
+
+
+
+
+
+
