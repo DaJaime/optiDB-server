@@ -1,0 +1,50 @@
+[
+  {
+    "name": "MySQL",
+    "version": "-",
+    "description": "MySQL est un serveur de bases de données relationnelles Open Source.\n \n Un serveur de bases de données stocke les données dans des tables séparées plutôt que de tout rassembler dans une seule table. Cela améliore la rapidité et la souplesse de l'ensemble. Les tables sont reliées par des relations définies, qui rendent possible la combinaison de données entre plusieurs tables durant une requête. Le SQL dans 'MySQL' signifie 'Structured Query Language' : le langage standard pour les traitements de bases de données.",
+    "typeModel": "Relationnel",
+    "logo": "https://upload.wikimedia.org/wikipedia/fr/thumb/6/62/MySQL.svg/220px-MySQL.svg.png",
+    "website": "https://www.mysql.com/fr/",
+    "developer": "Oracle",
+    "initialRelease": 1995,
+    "license": "Open Source - GPL v2",
+    "requetage": "SQL"
+  },
+  {
+    "name": "PostGreSQL",
+    "version": "-",
+    "description": "PostgreSQL est un Système de Gestion de Base de Données (SBGD) libre disponible sous licence BSD. Ce système multi-plateforme est largement connu et réputé à travers le monde, notamment pour son comportement stable et pour être très respectueux des normes ANSI SQL. Ce projet libre n’est pas géré par une entreprise mais par une communauté de développeurs.\nLa première version de PostgreSQL date de 1996. A l’origine il s’agit de la base de données Ingres, développé par Michael Stonebraker, qui a été reprogrammé de zéro en 1985 sous le nom Postgres (post-ingres). SQL a été ajouté à Postgres en 1995 sous le nom de projet Postgres95 et le nom à évolué en PostgreSQL en 1996.",
+    "typeModel": "Relationnel",
+    "logo": "http://www.impulsmap.fr/wp-content/uploads/2016/07/LogoPostgreSql100reel.png",
+    "website": "https://www.postgresql.org/",
+    "developer": "PostgreSQL United States",
+    "initialRelease": 1989,
+    "license": "License BSD",
+    "requetage": "SQL"
+  },
+  {
+    "name": "MariaDB",
+    "version": "-",
+    "description": "MariaDB est un Système de Gestion de Base de Données (SGBD) disponible sous licence GPL. Ce système est un fork de MySQL, ce qui signifie que c’est un nouveau logiciel créé à partir du code source de MySQL.\n\nLe projet a été lancé par l’entreprise Monty Program AB et sa maintenance est assurée par la fondation MariaDB. Cette fondation est une organisation à but non lucrative qui permet de s’assurer que le projet restera libre et qu’il y a une protection légale autour du projet.\nSachant que MySQL a fini par devenir un projet de l’entreprise Oracle, l’informaticien Michael Widenius qui est le principal développeur de MySQL décide de créer MariaDB dans le but de remplacer MySQL et d’assurer une interropérabilité avec celui-ci.",
+    "typeModel": "Relationnel",
+    "logo": "https://michauko.org/blog/wp-content/uploads/2016/02/logo-Mariadb.png",
+    "website": "https://mariadb.org/",
+    "developer": "MariaDB Foundation",
+    "initialRelease": 2009,
+    "license": "Open Source - GPL v2",
+    "requetage": ""
+  },
+  {
+    "name": "SQLite",
+    "version": "-",
+    "description": "SQLite est un système de base de données qui a la particularité de fonctionner sans serveur, on dit aussi \"standalone\" ou \"base de données embarquée\". On peut l'utiliser avec beaucoup de langages : PHP, Python, C# (.NET), Java, C/C++, Delphi, Ruby...\nL'intérêt c'est que c'est très léger et rapide à mettre en place, on peut s'en servir aussi bien pour stocker des données dans une vraie base de données sur une application pour smartphone (iPhone ou Android), pour une application Windows, ou sur un serveur web.\nUne base de données SQLite est bien plus performante et facile à utiliser que de stocker les données dans des fichiers XML ou binaires.",
+    "typeModel": "Relationnel",
+    "logo": "https://sql.sh/wp-content/uploads/2014/04/sqlite-sgbd-500px.png",
+    "website": "https://www.sqlite.org/index.html",
+    "developer": "Dwayne Richard Hipp",
+    "initialRelease": 2000,
+    "license": "Domaine public",
+    "requetage": "SQL"
+  }
+]

@@ -6,7 +6,7 @@ __pycache__/
 # IDE
 .idea
 .vscode
-.iml
+*.iml
 .project
 .classpath
 .settings
@@ -73,6 +73,7 @@ ENV/
 
 # Ignore directories
 log/*
+media/*
 output
 reports
 
