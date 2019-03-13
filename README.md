@@ -36,26 +36,24 @@ Il faut aussi que vous ayez vagrant dans le path
 3. Cloner ou télécharger le projet
     - git clone https://github.com/DaJaime/optiDB-server.git 
     - télécharger directement le dépôt en cliquant [ici](https://github.com/DaJaime/optiDB-server/archive/master.zip)
-4. vagrant up
+4. cd optiDB-server
+5. vagrant up
 
 # Lancer le serveur
 
 ```bash
 # Accéder au shell
-vagrant ssh
+6. vagrant ssh
 
 # Accéder au répertoire du projet
-cd /vagrant
+7. cd /vagrant
 
-# Build et installer les dépendances
-mvn clean install
-
-# Executer le serveur
-java -jar target/optidb-server-1.0-Alpha.jar
-
+# Executez le serveur
+8. ./scripts/run.sh
 ```
 
 >Vous devez désormais procédé à l'installation de la partie cliente du projet(liens dans les prérequis).
+>Si c'est dèjà fait, vous pouvez executez le client
 
 
 
