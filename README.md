@@ -18,18 +18,18 @@
 * Télécharger la box du serveur - [Télécharger la box](https://github.com/jose-lpa/packer-ubuntu_lts/releases/download/v3.1/ubuntu-16.04.box)
 
 ## Description
-OptiDB est un projet qui test la performance de trois base de données : 
+OptiDB est un projet qui teste la performance de trois bases de données : 
 * Mysql 
 * MariaDB
 * Postgres  
 
-En indiquant le nombre de colonnes, de lignes et si la table doit contenir ou non une clé primaire, elle va généré un jeu de donnée dans un docker et retourner le temps d'excution des différentes réquêtes.
-Vous vous trouvez sur OptiDB-server qui est l'api rest du projet. C'est cette API qui va retourner les résultats des tests qui seront envoyé vers le projet OptiDB-Client.
+En indiquant le nombre de colonnes, de lignes et si la table doit contenir ou non une clé primaire, elle va générer un jeu de données dans un docker et retourner le temps d'excution des différentes requêtes.
+Vous vous trouver sur OptiDB-server qui est l'API REST du projet. C'est cette API qui va retourner les résultats des tests qui seront envoyés vers le projet OptiDB-Client.
 
 # Installer l'image avec vagrant
 
->Pour pouvoir lancer la machine virtuelle avec vagrant il faut d'abord récupérer l'image de la box (lien dans les prérequis). 
-Il faut aussi que vous ayez vagrant dans le path
+> Pour pouvoir lancer la machine virtuelle avec vagrant, il faut d'abord récupérer l'image de la box (lien dans les prérequis). 
+Il faut aussi que vous ayez vagrant dans le path.
 
 1. cd $chemin_vers_la_box
 2. vagrant box add --name optiDB-server ubuntu-16.04.box
@@ -52,8 +52,8 @@ Il faut aussi que vous ayez vagrant dans le path
 8. ./scripts/run.sh
 ```
 
->Vous devez désormais procédé à l'installation de la partie cliente du projet(liens dans les prérequis).
->Si c'est dèjà fait, vous pouvez executez le client
+> Vous devez désormais procéder à l'installation de la partie client du projet (liens dans les prérequis).
+> Si c'est déjà fait, vous pouvez exécuter le client
 
 
 
