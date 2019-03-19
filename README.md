@@ -26,6 +26,8 @@ OptiDB est un projet qui teste la performance de trois bases de données :
 En indiquant le nombre de colonnes, de lignes et si la table doit contenir ou non une clé primaire, elle va générer un jeu de données dans un docker et retourner le temps d'excution des différentes requêtes.
 Vous vous trouver sur OptiDB-server qui est l'API REST du projet. C'est cette API qui va retourner les résultats des tests qui seront envoyés vers le projet OptiDB-Client.
 
+> Documentation de l'API disponible à cette adresse : http://192.168.33.10:8080/swagger-ui.html (Le server doit être lancé).
+
 # Installer l'image avec vagrant
 
 > Pour pouvoir lancer la machine virtuelle avec vagrant, il faut d'abord récupérer l'image de la box (lien dans les prérequis). 
