@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>optidb.server</groupId>
 	<artifactId>optidb-server</artifactId>
-	<version>1.0-Beta</version>
+	<version>1.0</version>
 	<name>optiDB-server</name>
 	<description>optiDB-server in Spring</description>
 
